@@ -1,0 +1,6 @@
+streamlit
+pandas
+numpy
+scikit-learn
+# optional, only for the "Neural" re-ranker:
+# sentence-transformers

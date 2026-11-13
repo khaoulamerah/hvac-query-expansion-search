@@ -1,0 +1,121 @@
+id,name,category,brand,description,price
+1,Combi Boiler 24kW,Boilers,AquaPro,"Wall-mounted gas combi boiler 24kW for central heating and instant hot water, high efficiency condensing",941.32
+2,Combi Boiler 30kW,Boilers,PipeMaster,"Wall-mounted gas combi boiler 30kW for central heating and instant hot water, high efficiency condensing",1165.23
+3,Combi Boiler 35kW,Boilers,ThermoMax,"Wall-mounted gas combi boiler 35kW for central heating and instant hot water, high efficiency condensing",1274.59
+4,System Boiler 18kW,Boilers,ThermoMax,"Gas system boiler 18kW for central heating with hot water cylinder, sealed system",1051.5
+5,System Boiler 24kW,Boilers,AquaPro,"Gas system boiler 24kW for central heating with hot water cylinder, sealed system",1267.06
+6,System Boiler 30kW,Boilers,PipeMaster,"Gas system boiler 30kW for central heating with hot water cylinder, sealed system",1374.44
+7,Electric Boiler 6kW,Boilers,AquaPro,"Electric boiler 6kW for central heating, no flue needed, compact",1083.39
+8,Electric Boiler 9kW,Boilers,EcoTherm,"Electric boiler 9kW for central heating, no flue needed, compact",1387.88
+9,Electric Boiler 12kW,Boilers,FlowTech,"Electric boiler 12kW for central heating, no flue needed, compact",1557.18
+10,Storage Water Heater 50L,Water Heating,AquaPro,Electric storage tank water heater 50L with thermostat for hot water supply,267.85
+11,Storage Water Heater 80L,Water Heating,HydroLine,Electric storage tank water heater 80L with thermostat for hot water supply,324.47
+12,Storage Water Heater 100L,Water Heating,HeatWave,Electric storage tank water heater 100L with thermostat for hot water supply,379.7
+13,Storage Water Heater 150L,Water Heating,PipeMaster,Electric storage tank water heater 150L with thermostat for hot water supply,411.55
+14,Hot Water Cylinder 120L,Water Heating,HeatWave,Unvented stainless steel hot water cylinder 120L with immersion heater,437.43
+15,Hot Water Cylinder 180L,Water Heating,EcoTherm,Unvented stainless steel hot water cylinder 180L with immersion heater,471.08
+16,Hot Water Cylinder 250L,Water Heating,HeatWave,Unvented stainless steel hot water cylinder 250L with immersion heater,555.56
+17,Panel Radiator 600x600,Radiators,AquaPro,Double panel steel radiator 600x600 for room heating with wall brackets,52.03
+18,Panel Radiator 600x1000,Radiators,ThermoMax,Double panel steel radiator 600x1000 for room heating with wall brackets,64.63
+19,Panel Radiator 600x1400,Radiators,EcoTherm,Double panel steel radiator 600x1400 for room heating with wall brackets,78.91
+20,Panel Radiator 300x1200,Radiators,FlowTech,Double panel steel radiator 300x1200 for room heating with wall brackets,79.83
+21,Towel Rail Radiator 500x800,Radiators,HeatWave,"Heated bathroom towel rail radiator 500x800, chrome or white finish",75.21
+22,Towel Rail Radiator 500x1200,Radiators,ThermoMax,"Heated bathroom towel rail radiator 500x1200, chrome or white finish",88.53
+23,Towel Rail Radiator 600x1600,Radiators,PipeMaster,"Heated bathroom towel rail radiator 600x1600, chrome or white finish",96.45
+24,Thermostatic Radiator Valve angled,Valves,ThermoMax,"TRV angled pattern for controlling radiator temperature, chrome",15.99
+25,Thermostatic Radiator Valve straight,Valves,ThermoMax,"TRV straight pattern for controlling radiator temperature, chrome",19.73
+26,Thermostatic Radiator Valve corner,Valves,ClearFlow,"TRV corner pattern for controlling radiator temperature, chrome",21.75
+27,Radiator Bleed Key,Accessories,HeatWave,Key to bleed trapped air from radiators and remove cold spots,3.14
+28,Smart Thermostat WiFi,Controls,HeatWave,WiFi programmable room thermostat controller for heating system with app control,58.46
+29,Smart Thermostat Wireless,Controls,FlowTech,Wireless programmable room thermostat controller for heating system with app control,71.84
+30,Smart Thermostat Wired,Controls,ThermoMax,Wired programmable room thermostat controller for heating system with app control,91.18
+31,Underfloor Thermostat touchscreen,Controls,HydroLine,Digital floor thermostat with sensor for underfloor heating touchscreen,46.86
+32,Underfloor Thermostat dial,Controls,PipeMaster,Digital floor thermostat with sensor for underfloor heating dial,56.55
+33,Circulator Pump 15-50,Pumps,EcoTherm,Variable speed central heating circulation pump 15-50,107.2
+34,Circulator Pump 25-60,Pumps,PipeMaster,Variable speed central heating circulation pump 25-60,132.92
+35,Circulator Pump 25-80,Pumps,AquaPro,Variable speed central heating circulation pump 25-80,166.75
+36,Underfloor Heating Kit 5m2,Underfloor Heating,AquaPro,"Electric underfloor heating mat 5m2 for bathroom, kitchen or tiled floors",118.12
+37,Underfloor Heating Kit 10m2,Underfloor Heating,EcoTherm,"Electric underfloor heating mat 10m2 for bathroom, kitchen or tiled floors",156.76
+38,Underfloor Heating Kit 15m2,Underfloor Heating,PipeMaster,"Electric underfloor heating mat 15m2 for bathroom, kitchen or tiled floors",171.1
+39,Underfloor Heating Kit 20m2,Underfloor Heating,HeatWave,"Electric underfloor heating mat 20m2 for bathroom, kitchen or tiled floors",216.52
+40,Expansion Vessel 8L,Heating Parts,ClearFlow,Pressure expansion vessel 8L for sealed heating systems,29.46
+41,Expansion Vessel 12L,Heating Parts,ClearFlow,Pressure expansion vessel 12L for sealed heating systems,36.94
+42,Expansion Vessel 18L,Heating Parts,HydroLine,Pressure expansion vessel 18L for sealed heating systems,41.97
+43,Expansion Vessel 24L,Heating Parts,FlowTech,Pressure expansion vessel 24L for sealed heating systems,49.15
+44,Magnetic System Filter 22mm,Heating Parts,EcoTherm,"Magnetic filter 22mm removes sludge and debris from heating water, protects boiler",74.34
+45,Magnetic System Filter 28mm,Heating Parts,EcoTherm,"Magnetic filter 28mm removes sludge and debris from heating water, protects boiler",92.63
+46,Boiler Flue Extension 500mm,Heating Parts,HydroLine,Boiler flue pipe extension kit 500mm for gas boilers,25.11
+47,Boiler Flue Extension 1m,Heating Parts,ThermoMax,Boiler flue pipe extension kit 1m for gas boilers,31.31
+48,Heating System Inhibitor 500ml,Consumables,ThermoMax,Central heating inhibitor liquid 500ml prevents corrosion and limescale,14.89
+49,Heating System Inhibitor 1L,Consumables,HydroLine,Central heating inhibitor liquid 1L prevents corrosion and limescale,16.62
+50,Radiator Cleaner 1L,Consumables,EcoTherm,Heating system cleaner descaler 1L removes sludge and restores heat output,17.1
+51,Radiator Cleaner 5L,Consumables,EcoTherm,Heating system cleaner descaler 5L removes sludge and restores heat output,20.29
+52,Copper Pipe 15mm 3m,Pipes,ClearFlow,Copper tube 15mm 3m for water supply and heating pipework,14.1
+53,Copper Pipe 22mm 3m,Pipes,AquaPro,Copper tube 22mm 3m for water supply and heating pipework,17.58
+54,Copper Pipe 28mm 3m,Pipes,ThermoMax,Copper tube 28mm 3m for water supply and heating pipework,21.21
+55,Copper Pipe 15mm coil 10m,Pipes,FlowTech,Copper tube 15mm coil 10m for water supply and heating pipework,24.45
+56,PEX Pipe 16mm 25m,Pipes,HeatWave,Flexible plastic piping 16mm 25m for hot and cold water plumbing and underfloor heating,42.61
+57,PEX Pipe 16mm 50m,Pipes,EcoTherm,Flexible plastic piping 16mm 50m for hot and cold water plumbing and underfloor heating,47.18
+58,PEX Pipe 20mm 50m,Pipes,AquaPro,Flexible plastic piping 20mm 50m for hot and cold water plumbing and underfloor heating,56.09
+59,PVC Waste Pipe 32mm,Pipes,FlowTech,"Waste drain pipe 32mm for sinks, basins and soil",8.74
+60,PVC Waste Pipe 40mm,Pipes,HydroLine,"Waste drain pipe 40mm for sinks, basins and soil",10.69
+61,PVC Waste Pipe 50mm,Pipes,ThermoMax,"Waste drain pipe 50mm for sinks, basins and soil",11.82
+62,PVC Waste Pipe 110mm soil,Pipes,FlowTech,"Waste drain pipe 110mm soil for sinks, basins and soil",14.35
+63,Compression Elbow 15mm,Fittings,PipeMaster,Brass compression elbow fitting 15mm joins copper pipes without soldering,2.15
+64,Compression Elbow 22mm,Fittings,HydroLine,Brass compression elbow fitting 22mm joins copper pipes without soldering,2.37
+65,Compression Elbow 28mm,Fittings,AquaPro,Brass compression elbow fitting 28mm joins copper pipes without soldering,2.97
+66,Compression Tee 15mm,Fittings,ClearFlow,Brass equal tee fitting 15mm branches copper pipes,3.12
+67,Compression Tee 22mm,Fittings,HeatWave,Brass equal tee fitting 22mm branches copper pipes,3.49
+68,Compression Tee 28mm,Fittings,FlowTech,Brass equal tee fitting 28mm branches copper pipes,4.67
+69,Pipe Coupling 15mm,Fittings,PipeMaster,Straight coupler 15mm connecting two pipes,1.97
+70,Pipe Coupling 22mm,Fittings,ThermoMax,Straight coupler 22mm connecting two pipes,2.64
+71,Pipe Coupling 28mm,Fittings,ClearFlow,Straight coupler 28mm connecting two pipes,2.77
+72,Ball Valve 1/2 inch,Valves,HydroLine,Quarter turn brass shutoff valve stopcock 1/2 inch for water isolation,6.43
+73,Ball Valve 3/4 inch,Valves,ClearFlow,Quarter turn brass shutoff valve stopcock 3/4 inch for water isolation,7.09
+74,Ball Valve 1 inch,Valves,HydroLine,Quarter turn brass shutoff valve stopcock 1 inch for water isolation,9.44
+75,Isolation Valve 15mm,Valves,EcoTherm,"Service isolating valve 15mm for taps, appliances and radiators",3.96
+76,Isolation Valve 22mm,Valves,PipeMaster,"Service isolating valve 22mm for taps, appliances and radiators",5.34
+77,Pressure Reducing Valve 15mm,Valves,EcoTherm,Water pressure reducing valve 15mm protects pipes and taps from high pressure,36.99
+78,Pressure Reducing Valve 22mm,Valves,HeatWave,Water pressure reducing valve 22mm protects pipes and taps from high pressure,46.94
+79,Kitchen Mixer Tap chrome,Taps,ClearFlow,Single lever kitchen faucet mixer chrome with swivel spout,55.86
+80,Kitchen Mixer Tap brushed steel,Taps,PipeMaster,Single lever kitchen faucet mixer brushed steel with swivel spout,64.96
+81,Kitchen Mixer Tap black,Taps,AquaPro,Single lever kitchen faucet mixer black with swivel spout,76.0
+82,Basin Tap chrome,Taps,PipeMaster,Bathroom basin faucet chrome with ceramic cartridge,41.53
+83,Basin Tap waterfall,Taps,AquaPro,Bathroom basin faucet waterfall with ceramic cartridge,50.67
+84,Basin Tap monobloc,Taps,AquaPro,Bathroom basin faucet monobloc with ceramic cartridge,55.33
+85,Bath Shower Mixer Tap chrome,Taps,AquaPro,Bath filler tap with shower handset chrome,88.59
+86,Bath Shower Mixer Tap black,Taps,ThermoMax,Bath filler tap with shower handset black,118.47
+87,Tap Cartridge 35mm,Spare Parts,FlowTech,Replacement ceramic cartridge 35mm to fix dripping leaking taps,9.24
+88,Tap Cartridge 40mm,Spare Parts,PipeMaster,Replacement ceramic cartridge 40mm to fix dripping leaking taps,11.53
+89,Flexible Tap Connector 15mm 300mm,Spare Parts,ClearFlow,Flexible hose tap connector 15mm 300mm for taps and basins,3.09
+90,Flexible Tap Connector 15mm 500mm,Spare Parts,ClearFlow,Flexible hose tap connector 15mm 500mm for taps and basins,3.61
+91,Thermostatic Shower Mixer exposed,Showers,PipeMaster,Shower valve exposed with temperature control and rain head,107.11
+92,Thermostatic Shower Mixer concealed,Showers,EcoTherm,Shower valve concealed with temperature control and rain head,117.63
+93,Thermostatic Shower Mixer bar,Showers,EcoTherm,Shower valve bar with temperature control and rain head,144.45
+94,Electric Shower 8.5kW,Showers,AquaPro,Instantaneous electric shower 8.5kW heats water on demand,91.8
+95,Electric Shower 9.5kW,Showers,ThermoMax,Instantaneous electric shower 9.5kW heats water on demand,115.4
+96,Electric Shower 10.5kW,Showers,HeatWave,Instantaneous electric shower 10.5kW heats water on demand,124.3
+97,Close Coupled Toilet soft close,Sanitary,ThermoMax,Ceramic WC toilet soft close with cistern and seat,117.71
+98,Close Coupled Toilet rimless,Sanitary,PipeMaster,Ceramic WC toilet rimless with cistern and seat,132.5
+99,Close Coupled Toilet compact,Sanitary,HydroLine,Ceramic WC toilet compact with cistern and seat,163.22
+100,Wall Hung Toilet rimless,Sanitary,FlowTech,"Wall hung WC pan rimless for modern bathroom, needs concealed frame",151.99
+101,Wall Hung Toilet standard,Sanitary,ThermoMax,"Wall hung WC pan standard for modern bathroom, needs concealed frame",186.55
+102,Wash Basin pedestal,Sanitary,ThermoMax,Ceramic sink basin pedestal for bathroom,50.82
+103,Wash Basin wall hung,Sanitary,AquaPro,Ceramic sink basin wall hung for bathroom,58.41
+104,Wash Basin countertop,Sanitary,PipeMaster,Ceramic sink basin countertop for bathroom,78.87
+105,Kitchen Sink single bowl,Sanitary,ClearFlow,Stainless steel kitchen sink single bowl with waste,78.0
+106,Kitchen Sink 1.5 bowl,Sanitary,EcoTherm,Stainless steel kitchen sink 1.5 bowl with waste,99.77
+107,Kitchen Sink double bowl,Sanitary,HydroLine,Stainless steel kitchen sink double bowl with waste,125.03
+108,Water Softener compact,Water Treatment,EcoTherm,"Water softener compact reduces limescale in hard water areas, protects boiler and taps",352.4
+109,Water Softener family,Water Treatment,ClearFlow,"Water softener family reduces limescale in hard water areas, protects boiler and taps",422.64
+110,PTFE Thread Seal Tape,Consumables,ClearFlow,Tape to seal threaded joints and stop leaks,1.99
+111,Pipe Repair Clamp 15mm,Consumables,FlowTech,Emergency clamp 15mm to stop pipe leak and burst repair,9.73
+112,Pipe Repair Clamp 22mm,Consumables,AquaPro,Emergency clamp 22mm to stop pipe leak and burst repair,11.99
+113,Pipe Insulation Foam 15mm 2m,Consumables,AquaPro,Foam lagging 15mm 2m to prevent frozen pipes and heat loss,3.11
+114,Pipe Insulation Foam 22mm 2m,Consumables,AquaPro,Foam lagging 22mm 2m to prevent frozen pipes and heat loss,3.89
+115,Silicone Sealant white,Consumables,ClearFlow,"Waterproof sealant white for sinks, baths and showers",4.79
+116,Silicone Sealant clear,Consumables,HydroLine,"Waterproof sealant clear for sinks, baths and showers",6.26
+117,Drain Unblocker 1L,Consumables,ThermoMax,"Drain cleaner 1L clears blocked sinks, basins and pipes",5.75
+118,Drain Unblocker 2L,Consumables,ThermoMax,"Drain cleaner 2L clears blocked sinks, basins and pipes",7.89
+119,Water Leak Detector WiFi,Controls,PipeMaster,Smart water leak sensor WiFi alerts you to leaks under sinks and boilers,25.98
+120,Water Leak Detector battery,Controls,PipeMaster,Smart water leak sensor battery alerts you to leaks under sinks and boilers,30.82
