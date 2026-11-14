@@ -1,5 +1,6 @@
 """Heating & Plumbing product recommender
 Query Expansion (synonym / related / concept / feedback / automatic) + Re-ranking (BM25, TF-IDF, hybrid, neural)
++ user accounts, search history and personalization
 Run:  streamlit run app.py
 """
 
@@ -13,176 +14,28 @@ import streamlit as st
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-# 1. DATASET  (replace with your own CSV: name, category, description, price)
-PRODUCTS = [
-    (
-        "Condensing Combi Boiler 30kW",
-        "Boilers",
-        "Wall-mounted gas combi boiler providing central heating and instant hot water, high efficiency with flue kit",
-        1250,
-    ),
-    (
-        "Oil System Boiler 24kW",
-        "Boilers",
-        "Floor standing oil fired boiler for heating and hot water cylinder",
-        1890,
-    ),
-    (
-        "Electric Water Heater 80L",
-        "Water Heating",
-        "Storage tank water heater with thermostat for hot water supply",
-        420,
-    ),
-    (
-        "Panel Radiator 600x1000",
-        "Radiators",
-        "Double panel steel radiator for room heating, includes wall brackets",
-        85,
-    ),
-    (
-        "Towel Radiator Chrome",
-        "Radiators",
-        "Bathroom heated towel rail radiator, chrome finish",
-        120,
-    ),
-    (
-        "Thermostatic Radiator Valve",
-        "Valves",
-        "TRV for controlling radiator temperature, angled chrome",
-        18,
-    ),
-    ("Radiator Bleed Key", "Accessories", "Key to bleed trapped air from radiators", 3),
-    (
-        "Smart Room Thermostat",
-        "Controls",
-        "WiFi programmable thermostat controller for heating system",
-        95,
-    ),
-    (
-        "Central Heating Circulator Pump",
-        "Pumps",
-        "Variable speed circulation pump for heating circuits",
-        160,
-    ),
-    (
-        "Underfloor Heating Kit 10m2",
-        "Underfloor Heating",
-        "Electric underfloor heating mat with thermostat for bathroom or kitchen floors",
-        210,
-    ),
-    (
-        "Expansion Vessel 18L",
-        "Heating Parts",
-        "Pressure expansion vessel for sealed heating systems",
-        45,
-    ),
-    (
-        "Magnetic System Filter",
-        "Heating Parts",
-        "Magnetic filter removes sludge and debris from heating water, protects boiler",
-        78,
-    ),
-    (
-        "Copper Pipe 15mm 3m",
-        "Pipes",
-        "Copper tube for water supply and heating pipework",
-        22,
-    ),
-    (
-        "PEX Pipe 16mm 50m",
-        "Pipes",
-        "Flexible plastic piping for hot and cold water plumbing",
-        64,
-    ),
-    ("PVC Waste Pipe 40mm", "Pipes", "Waste drain pipe for sinks and basins", 9),
-    (
-        "Compression Elbow 15mm",
-        "Fittings",
-        "Brass elbow fitting joins copper pipes without soldering",
-        2.5,
-    ),
-    ("Pipe Coupling 22mm", "Fittings", "Straight coupler connecting two pipes", 3),
-    (
-        "Ball Valve 1/2 inch",
-        "Valves",
-        "Quarter turn brass shutoff valve stopcock for water isolation",
-        8,
-    ),
-    (
-        "Kitchen Mixer Tap Chrome",
-        "Taps",
-        "Single lever kitchen faucet mixer with swivel spout",
-        75,
-    ),
-    ("Basin Tap Waterfall", "Taps", "Bathroom basin faucet with ceramic cartridge", 55),
-    (
-        "Tap Cartridge Replacement",
-        "Spare Parts",
-        "Ceramic cartridge to fix dripping leaking taps",
-        12,
-    ),
-    (
-        "Thermostatic Shower Mixer",
-        "Showers",
-        "Exposed shower valve with temperature control, includes rain head",
-        140,
-    ),
-    (
-        "Close Coupled Toilet",
-        "Sanitary",
-        "Ceramic WC toilet with soft close seat and cistern",
-        160,
-    ),
-    (
-        "Pedestal Wash Basin",
-        "Sanitary",
-        "Ceramic sink basin with pedestal for bathroom",
-        70,
-    ),
-    (
-        "PTFE Thread Seal Tape",
-        "Consumables",
-        "Tape to seal threaded joints and stop leaks",
-        2,
-    ),
-    (
-        "Pipe Repair Clamp",
-        "Consumables",
-        "Emergency clamp to stop pipe leak and burst repair",
-        15,
-    ),
-    (
-        "Pipe Insulation Foam 2m",
-        "Consumables",
-        "Foam lagging to prevent frozen pipes and heat loss",
-        4,
-    ),
-    (
-        "Silicone Sealant",
-        "Consumables",
-        "Waterproof sealant for sinks, baths and showers",
-        7,
-    ),
-]
+import db
+import personalization
+
+# 1. DATASET  (CSV with the columns: name, category, description, price - brand is optional)
+CATALOG_PATH = "data/products.csv"
+REQUIRED_COLUMNS = {"name", "category", "description", "price"}
 
 
 def load_products(uploaded=None) -> pd.DataFrame:
-    import os
-
-    if uploaded is not None:
-        df = pd.read_csv(uploaded)
-    elif os.path.exists("data/products.csv"):
-        df = pd.read_csv("data/products.csv")
-    else:
-        df = pd.DataFrame(
-            PRODUCTS, columns=["name", "category", "description", "price"]
+    """Priority: uploaded CSV > data/products.csv."""
+    df = pd.read_csv(uploaded if uploaded is not None else CATALOG_PATH)
+    missing = REQUIRED_COLUMNS - set(df.columns)
+    if missing:
+        raise ValueError(
+            f"The CSV must contain the columns: {', '.join(sorted(REQUIRED_COLUMNS))}. Missing: {', '.join(sorted(missing))}"
         )
     for col in ("name", "category", "description"):
         df[col] = df[col].fillna("").astype(str)
     return df
 
 
-# 2. KNOWLEDGE BASES for expansion (domain dictionaries)
+# KNOWLEDGE BASES for expansion (domain dictionaries)
 SYNONYMS = {
     "boiler": ["heater", "water heater"],
     "faucet": ["tap", "mixer"],
@@ -243,7 +96,7 @@ STOP = set(
 )
 
 
-# 3. STEP 1 - IDENTIFY QUERY TERMS (tokenize, stop-words, light stemming)
+# IDENTIFY QUERY TERMS (tokenize, stop-words, light stemming)
 def stem(w: str) -> str:
     for suf in ("ing", "ed", "s"):
         if w.endswith(suf) and not w.endswith("ss") and len(w) - len(suf) >= 3:
@@ -255,7 +108,7 @@ def tokenize(text: str) -> list[str]:
     return [stem(w) for w in re.findall(r"[a-z0-9]+", text.lower()) if w not in STOP]
 
 
-# 4. INDEX: BM25 + TF-IDF over the product catalogue
+#  INDEX: BM25 + TF-IDF over the product catalogue
 
 
 class Index:
@@ -283,6 +136,7 @@ class Index:
         self.X = self.vec.fit_transform(self.texts).toarray()
         self.vocab = self.vec.vocabulary_
         self.terms = self.vec.get_feature_names_out()
+        self.pos = {n: i for i, n in enumerate(self.df["name"])}  # product name -> row
 
     def bm25(self, weights: dict) -> np.ndarray:
         scores = np.zeros(self.N)
@@ -322,7 +176,7 @@ class Index:
         return [self.terms[j] for j in np.argsort(-centroid)[:n]]
 
 
-# 5. STEPS 2 & 3 - EXPAND QUERY TERMS
+#  EXPAND QUERY TERMS
 def expand_query(query: str, methods: list[str], idx: Index):
     q = tokenize(query)
     qset = set(q)
@@ -357,7 +211,7 @@ def expand_query(query: str, methods: list[str], idx: Index):
     return weights, log
 
 
-# 6. STEP 4 - RE-RANKING
+#  RE-RANKING
 @st.cache_resource(show_spinner="Loading neural model...")
 def load_neural():
     from sentence_transformers import SentenceTransformer
@@ -370,8 +224,20 @@ def minmax(x):
     return (x - x.min()) / rng if rng else np.zeros_like(x)
 
 
-def search(query, methods, reranker, k, idx: Index, n_candidates=12):
+def search(
+    query, methods, reranker, k, idx: Index, n_candidates=12, profile=None, alpha=0.0
+):
+    """Expansion -> BM25 candidates -> re-ranking -> (optional) personalization.
+
+    profile: user-interest vector from personalization.build_profile (None = no personalization)
+    alpha:   weight of the personalization in the final score (0 = off, 1 = history only)
+    Returns (results, weights, log); results = [{"i": product row, "score": ..., "personal": ...}]
+    """
     weights, log = expand_query(query, methods, idx)
+    active = profile is not None and alpha > 0 and bool(profile.any())
+    if active:  # give the history more candidates to promote
+        n_candidates = max(n_candidates, 20)
+
     first = idx.bm25(weights)  # stage 1: candidate retrieval
     cand = [i for i in np.argsort(-first)[:n_candidates] if first[i] > 0]
     if not cand:
@@ -391,20 +257,124 @@ def search(query, methods, reranker, k, idx: Index, n_candidates=12):
         de = model.encode([idx.texts[i] for i in cand], normalize_embeddings=True)
         final = (qe @ de.T)[0]
 
-    order = np.argsort(-final)[:k]
-    results = [(int(cand[o]), float(final[o])) for o in order]
+    # stage 3: personalization = blend relevance with the affinity to the user's history
+    personal = np.zeros(len(cand))
+    score = final
+    if active:
+        aff = personalization.affinity(idx, profile)
+        if aff.max() > 0:
+            personal = aff[cand] / aff.max()  # 1.0 = best match of the whole catalogue
+            score = (1 - alpha) * minmax(final) + alpha * personal
+
+    order = np.argsort(-score)[:k]
+    results = [
+        {"i": int(cand[o]), "score": float(score[o]), "personal": float(personal[o])}
+        for o in order
+    ]
     return results, weights, log
 
 
-# 7. UI
+########### UI
+def _submit():
+    """Search form callback: remember the query and ask to save it in the history."""
+    q = st.session_state.get("q_input", "").strip()
+    if q:
+        st.session_state.query = q
+        st.session_state.save_pending = True  # saved once, not on every rerun
+        st.session_state.refresh_profile = True
+
+
+def _use_history(q):
+    """Re-run an old search from the history (not saved a second time)."""
+    st.session_state.q_input = q
+    st.session_state.query = q
+    st.session_state.refresh_profile = True
+
+
+def _like(uid, name, query):
+    db.add_interaction(uid, name, query)
+    st.session_state.setdefault("liked", set()).add(name)
+
+
+def _clear(uid):
+    db.clear_history(uid)
+    st.session_state.refresh_profile = True
+    st.session_state.pop("liked", None)
+
+
+def unique_queries(history, n):
+    seen, out = set(), []
+    for h in history:
+        if h["query"] not in seen:
+            seen.add(h["query"])
+            out.append(h["query"])
+        if len(out) == n:
+            break
+    return out
+
+
+@st.cache_resource(show_spinner="Indexing the catalogue...")
+def default_index():
+    return Index(load_products())
+
+
+def auth_screen():
+    st.title("🔧 SmartHeat Plumbing Recommender")
+    st.caption("Sign in to get search results personalised with your history")
+    tab_in, tab_up = st.tabs(["Sign in", "Create account"])
+
+    with tab_in:
+        with st.form("signin_form"):
+            username = st.text_input("Username")
+            password = st.text_input("Password", type="password")
+            ok = st.form_submit_button("Sign in")
+        if ok:
+            user = db.authenticate(username, password)
+            if user:
+                st.session_state.user = user
+                st.session_state.refresh_profile = True
+                st.rerun()
+            else:
+                st.error("Wrong username or password.")
+
+    with tab_up:
+        with st.form("signup_form"):
+            new_user = st.text_input("Choose a username")
+            pw1 = st.text_input("Choose a password (6+ characters)", type="password")
+            pw2 = st.text_input("Confirm the password", type="password")
+            ok2 = st.form_submit_button("Create account")
+        if ok2:
+            if pw1 != pw2:
+                st.error("The two passwords do not match.")
+            else:
+                done, msg = db.create_user(new_user, pw1)
+                if done:
+                    st.success(msg + " You can now sign in from the first tab.")
+                else:
+                    st.error(msg)
+
+
 def main():
     st.set_page_config(
-        page_title="Heating & Plumbing Finder", page_icon="🔧", layout="wide"
+        page_title="SmartHeat Plumbing Recommender", page_icon="🔧", layout="wide"
     )
+    db.init_db()
+
+    user = st.session_state.get("user")
+    if not user:
+        auth_screen()
+        return
+    uid = user["id"]
+
     st.title("🔧 SmartHeat Plumbing Recommender")
-    st.caption("Query expansion + re-ranking")
+    st.caption("Query expansion + re-ranking + personalization")
 
     with st.sidebar:
+        st.markdown(f"👤 Signed in as **{user['username']}**")
+        if st.button("Log out"):
+            st.session_state.clear()
+            st.rerun()
+
         st.header("Settings")
         up = st.file_uploader(
             "Your catalogue (CSV: name, category, description, price)", type="csv"
@@ -431,44 +401,177 @@ def main():
         )
         k = st.slider("Results", 3, 10, 5)
 
-    idx = Index(load_products(up))
-    query = st.text_input(
-        "What are you looking for?",
-        placeholder="e.g. fix dripping faucet, heating for bathroom, hot water",
-    )
+        st.header("Personalization")
+        personalize = st.toggle("Use my history", value=True)
+        alpha = st.slider(
+            "Strength",
+            0.0,
+            1.0,
+            0.4,
+            0.05,
+            disabled=not personalize,
+            help="0 = ignore my history, 1 = rank only by my history",
+        )
 
-    if query:
-        results, weights, log = search(query, methods, reranker, k, idx)
-        left, right = st.columns([2, 1])
-        with right:
-            st.subheader("Query analysis")
-            st.write(
-                "**Original terms:**",
-                ", ".join(t for t, w in weights.items() if w == 1.0) or "-",
+    try:
+        idx = Index(load_products(up)) if up is not None else default_index()
+    except Exception as e:
+        st.error(f"Could not load the catalogue: {e}")
+        st.stop()
+
+    query = st.session_state.get("query", "")
+
+    # Interest profile, built BEFORE the current search is saved so a query never boosts itself.
+    # It is kept in session_state and refreshed only when a new search starts.
+    sig = (idx.N, len(idx.vocab))
+    snap = st.session_state.get("profile")
+    if (
+        st.session_state.pop("refresh_profile", False)
+        or snap is None
+        or snap["sig"] != sig
+    ):
+        liked = [x["product_name"] for x in db.get_interactions(uid, 100)]
+        queries = [h["query"] for h in db.get_history(uid, 100)]
+        snap = {
+            "vec": personalization.build_profile(idx, tokenize, queries, liked),
+            "cats": personalization.top_categories(idx, liked),
+            "sig": sig,
+        }
+        st.session_state.profile = snap
+
+    if st.session_state.pop("save_pending", False) and query:
+        db.add_search(uid, query)
+    history = db.get_history(uid, 100)
+
+    tab_search, tab_hist = st.tabs(["🔍 Search", "🕘 My history"])
+
+    with tab_search:
+        with st.form("search_form"):
+            st.text_input(
+                "What are you looking for?",
+                key="q_input",
+                placeholder="e.g. fix dripping faucet, heating for bathroom, hot water",
             )
-            if log:
-                st.dataframe(
-                    pd.DataFrame(log), hide_index=True, use_container_width=True
+            st.form_submit_button("Search", on_click=_submit)
+
+        recent = unique_queries(history, 5)
+        if recent:
+            st.caption("Recent searches")
+            for col, q in zip(st.columns(len(recent)), recent):
+                col.button(
+                    q,
+                    key=f"recent_{q}",
+                    on_click=_use_history,
+                    args=(q,),
+                    width="stretch",
                 )
-            else:
-                st.info("No expansion terms added.")
-        with left:
-            st.subheader("Recommendations")
-            if not results:
-                st.warning("No matching products.")
-            for i, score in results:
-                r = idx.df.iloc[i]
-                with st.container(border=True):
-                    st.markdown(
-                        f"**{r['name']}**  ·  `{r['category']}`  ·  **${r['price']}**"
-                        + (
-                            f"  ·  {r['brand']}"
-                            if "brand" in r and pd.notna(r["brand"])
-                            else ""
+
+        if not query:
+            st.info("Type a query above to get recommendations.")
+        else:
+            results, weights, log = search(
+                query,
+                methods,
+                reranker,
+                k,
+                idx,
+                profile=snap["vec"] if personalize else None,
+                alpha=alpha if personalize else 0.0,
+            )
+            left, right = st.columns([2, 1])
+            with right:
+                st.subheader("Query analysis")
+                st.write(
+                    "**Original terms:**",
+                    ", ".join(t for t, w in weights.items() if w == 1.0) or "-",
+                )
+                if log:
+                    st.dataframe(pd.DataFrame(log), hide_index=True, width="stretch")
+                else:
+                    st.info("No expansion terms added.")
+            with left:
+                st.subheader("Recommendations")
+                if personalize:
+                    terms = personalization.top_terms(idx, snap["vec"])
+                    if terms:
+                        st.caption(
+                            "🎯 Personalized with your interests: " + ", ".join(terms)
                         )
-                    )
-                    st.write(r["description"])
-                    st.caption(f"Relevance score: {score:.3f}")
+                    else:
+                        st.caption(
+                            "🎯 Personalization is on, but your history is empty. "
+                            "Search a few times and press 👍 on products you like."
+                        )
+                if not results:
+                    st.warning("No matching products.")
+                liked_now = st.session_state.get("liked", set())
+                for r in results:
+                    row = idx.df.iloc[r["i"]]
+                    with st.container(border=True):
+                        st.markdown(
+                            f"**{row['name']}**  ·  `{row['category']}`  ·  **${row['price']}**"
+                            + (
+                                f"  ·  {row['brand']}"
+                                if "brand" in row and pd.notna(row["brand"])
+                                else ""
+                            )
+                        )
+                        st.write(row["description"])
+                        c1, c2 = st.columns([3, 1])
+                        caption = f"Relevance score: {r['score']:.3f}"
+                        if r["personal"] > 0.05:
+                            caption += f"  ·  🎯 interest match {r['personal']:.0%}"
+                        c1.caption(caption)
+                        c2.button(
+                            "✅ Noted" if row["name"] in liked_now else "👍 Interested",
+                            key=f"like_{r['i']}",
+                            on_click=_like,
+                            args=(uid, row["name"], query),
+                            disabled=row["name"] in liked_now,
+                            width="stretch",
+                        )
+
+    with tab_hist:
+        inter = db.get_interactions(uid, 100)
+        st.subheader("Your profile")
+        terms = personalization.top_terms(idx, snap["vec"], 8)
+        st.write(
+            "**Interest keywords:**", ", ".join(terms) if terms else "- (nothing yet)"
+        )
+        st.write(
+            "**Favourite categories:**",
+            ", ".join(snap["cats"]) if snap["cats"] else "- (nothing yet)",
+        )
+
+        st.subheader("Searches")
+        if history:
+            st.dataframe(
+                pd.DataFrame(history).rename(
+                    columns={"query": "Query", "created_at": "Date (UTC)"}
+                ),
+                hide_index=True,
+                width="stretch",
+            )
+        else:
+            st.info("No searches yet.")
+
+        st.subheader("Products you were interested in")
+        if inter:
+            st.dataframe(
+                pd.DataFrame(inter).rename(
+                    columns={
+                        "product_name": "Product",
+                        "query": "Found with query",
+                        "created_at": "Date (UTC)",
+                    }
+                ),
+                hide_index=True,
+                width="stretch",
+            )
+        else:
+            st.info("Press 👍 Interested on a product to add it here.")
+
+        st.button("🗑 Clear my history", on_click=_clear, args=(uid,))
 
 
 if __name__ == "__main__":
