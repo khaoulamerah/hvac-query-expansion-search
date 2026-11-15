@@ -1,16 +1,3 @@
-"""Personalization: turn a user's history into an interest profile, then score products with it.
-
-Idea
-----
-Every product already has a TF-IDF vector (idx.X). The user's profile lives in the same space:
-  - each past search adds the TF-IDF terms of its words (recent searches count more)
-  - each product marked "Interested" adds that product's whole vector (stronger signal)
-The affinity of a product = cosine(profile, product vector). It is then blended with the
-normal relevance score in app.search().
-
-This module does not import app.py: the index and the tokenizer are passed in as arguments.
-"""
-
 from collections import Counter
 
 import numpy as np

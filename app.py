@@ -1,9 +1,3 @@
-"""Heating & Plumbing product recommender
-Query Expansion (synonym / related / concept / feedback / automatic) + Re-ranking (BM25, TF-IDF, hybrid, neural)
-+ user accounts, search history and personalization
-Run:  streamlit run app.py
-"""
-
 import math
 import re
 from collections import Counter
@@ -17,13 +11,12 @@ from sklearn.metrics.pairwise import cosine_similarity
 import db
 import personalization
 
-# 1. DATASET  (CSV with the columns: name, category, description, price - brand is optional)
+# 1. DATASET 
 CATALOG_PATH = "data/products.csv"
 REQUIRED_COLUMNS = {"name", "category", "description", "price"}
 
 
 def load_products(uploaded=None) -> pd.DataFrame:
-    """Priority: uploaded CSV > data/products.csv."""
     df = pd.read_csv(uploaded if uploaded is not None else CATALOG_PATH)
     missing = REQUIRED_COLUMNS - set(df.columns)
     if missing:
@@ -227,11 +220,7 @@ def minmax(x):
 def search(
     query, methods, reranker, k, idx: Index, n_candidates=12, profile=None, alpha=0.0
 ):
-    """Expansion -> BM25 candidates -> re-ranking -> (optional) personalization.
-
-    profile: user-interest vector from personalization.build_profile (None = no personalization)
-    alpha:   weight of the personalization in the final score (0 = off, 1 = history only)
-    Returns (results, weights, log); results = [{"i": product row, "score": ..., "personal": ...}]
+    """Expansion -> BM25 candidates -> re-ranking -> personalization.
     """
     weights, log = expand_query(query, methods, idx)
     active = profile is not None and alpha > 0 and bool(profile.any())

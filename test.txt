@@ -1,0 +1,36 @@
+queries :
+
+fix dripping faucet
+heating for bathroom
+hot water
+stop pipe leak
+pizza
+
+
+
+methods d'expansion :
+
+1. Synonym :(Dictionnaire manuel) même chose, autre mot. Un dictionnaire écrit à la main, SYNONYMS, relie des mots équivalents.
+
+2. Related term : (Dictionnaire manuel) pas la même chose, mais ce qu’on achète ou cherche avec. Dictionnaire RELATED
+
+3. Concept : (Dictionnaire manuel) passer d’une idée générale à des produits concrets. Dictionnaire CONCEPTS.
+
+4. Automatic :(Les données (co-occurrence)) y'ajouter les mots 3la 7sab score ta tf-idf
+
+5. Feedback (PRF): Les 3 premiers résultats calculer tf-idf ta3hom On ajoute les 5 mots les plus forts du centroïde 
+
+
+
+
+
+Partie 2 : les méthodes de ranking :
+
+Les deux étapes
+Récupération : BM25 avec la requête pondérée garde les 12 meilleurs candidats (20 si la personnalisation est active), à condition que leur score soit > 0.
+Re-ranking : la méthode choisie dans la barre latérale réordonne ces candidats.
+
+BM25 : le score de mots-clés
+score = Σ  poids_du_mot × IDF(mot) × f × (k1+1) / ( f + k1 × (1 − b + b × longueur/longueur_moyenne) )
+(f = nombre de fois que le mot apparaît dans le produit ; k1 = 1,5 ; b = 0,75)
+

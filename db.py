@@ -1,8 +1,5 @@
-"""SQLite storage for SmartHeat: user accounts, search history and product interactions.
 
-Only the standard library is used (sqlite3, hashlib), so no extra dependency is needed.
-Passwords are never stored in clear text: PBKDF2-HMAC-SHA256 with a random salt per user.
-"""
+## Passwords are never stored in clear text: PBKDF2-HMAC-SHA256 with a random salt per user.
 
 import hashlib
 import hmac
